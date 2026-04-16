@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <stdexcept>
+#include <initializer_list>
 
 template<class T>
 class LinkedList {
@@ -9,6 +10,8 @@ private:
         T data;
         Node* next;
         Node* prev;
+
+        Node(const T& value) : data(value), next(nullptr), prev(nullptr) {}
 
     };
     size_t length_;
@@ -19,7 +22,7 @@ public:
     LinkedList();
     LinkedList(T* items, size_t count);
     LinkedList(const LinkedList <T>& list);
-    //сюда initializer_list
+    LinkedList(const std::initializer_list<T>& linked_list);
     ~LinkedList();
 
     size_t get_length() const;

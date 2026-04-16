@@ -11,9 +11,19 @@ LinkedList<T>::LinkedList(T* items, size_t count) : LinkedList() {
     }
 }
 
-//С итератором и append (И init list)
+// Переделать с итератором
+template<class T>
+LinkedList<T>::LinkedList(const LinkedList<T>& source_list) : LinkedList() {
+    Node* current = source_list.head_;
+    while (current != nullptr) {
+        append(current->data);
+        current = current->next;
+    }
+}
+
 // template<class T>
-// LinkedList<T>::LinkedList(const LinkedList<T>& list) : LinkedList() {
+// LinkedList<T>::LinkedList(const std::initializer_list<T>& list) : LinkedList() {
+
 // }
 
 template<class T>
@@ -108,7 +118,7 @@ void LinkedList<T>::insert_at(T item, size_t index) {
     if (index >= length_) {
         throw IndexOutOfRangeException("Индекс вне списка");
     }
-    if (index == length_ - 1) {
+    if (index == length_) {
         append(item);
     }
     else if (index == 0) {
@@ -143,4 +153,19 @@ LinkedList<T>* LinkedList<T>::get_sublist(size_t start_index, size_t end_index) 
         current = current->next;
     }
     return sublist;
+}
+
+template<class T>
+LinkedList<T>* LinkedList<T>::concat(LinkedList<T>* list) {
+    if (list == nullptr) {
+        throw NullPointerException("Передан нулевой указатель");
+    }
+    LinkedList<T>* new_list = new LinkedList<T>(*this);
+    Node* current = list->head_;
+    
+    while (current != nullptr) {
+        new_list->append(current->data);
+        current = current->next;
+    }
+    return new_list;
 }
