@@ -4,6 +4,7 @@
 #include "LinkedList.hpp"
 #include "ArraySequence.hpp"
 #include "Sequence.hpp"
+#include "ListSequence.hpp"
 
 int main() {
 
@@ -28,9 +29,11 @@ int main() {
     // list.insert_at(1000, 3);
     // std::cout << list.get_node(3)->data << std::endl;
 
-    ArraySequence<int> seq;
+    // ArraySequence<int> seq;
+    // seq.append(4);
+    // std::cout << seq.get(0) << std::endl;
+    
+    ListSequence<int> seq;
     seq.append(4);
     std::cout << seq.get(0) << std::endl;
-    
-
 }

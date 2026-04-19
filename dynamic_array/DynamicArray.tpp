@@ -84,7 +84,7 @@ size_t DynamicArray<T>::get_size() const {
 }
 
 template<class T>
-T& DynamicArray<T>::get_reference(size_t index) {
+T& DynamicArray<T>::get_reference(size_t index) const {
     if (index >= size_) {
         throw IndexOutOfRangeException("Индекс вне массива");
     }
@@ -137,5 +137,15 @@ ArrayIterator<T> DynamicArray<T>::begin() {
 
 template<class T>
 ArrayIterator<T> DynamicArray<T>::end() {
+    return ArrayIterator<T>(data_ + size_, data_ + size_);
+}
+
+template<class T>
+ArrayIterator<T> DynamicArray<T>::begin() const {
+    return ArrayIterator<T>(data_, data_ + size_);
+}
+
+template<class T>
+ArrayIterator<T> DynamicArray<T>::end() const {
     return ArrayIterator<T>(data_ + size_, data_ + size_);
 }

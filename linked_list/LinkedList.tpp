@@ -11,20 +11,20 @@ LinkedList<T>::LinkedList(T* items, size_t count) : LinkedList() {
     }
 }
 
-// Переделать с итератором
 template<class T>
 LinkedList<T>::LinkedList(const LinkedList<T>& source_list) : LinkedList() {
-    Node* current = source_list.head_;
-    while (current != nullptr) {
-        append(current->data);
-        current = current->next;
+    for (const auto& item : source_list) {
+        append(item);
     }
 }
 
-// template<class T>
-// LinkedList<T>::LinkedList(const std::initializer_list<T>& list) : LinkedList() {
+template<class T>
+LinkedList<T>::LinkedList(const std::initializer_list<T>& linked_list) : LinkedList() {
+    for (const auto& item : linked_list) {
+        append(item);
+    }
 
-// }
+}
 
 template<class T>
 LinkedList<T>::~LinkedList() {
@@ -81,6 +81,16 @@ T LinkedList<T>::get_last() const {
 template<class T>
 T LinkedList<T>::get(size_t index) const {
     return get_node(index)->data;
+}
+
+template<class T>
+T& LinkedList<T>::get_reference(size_t index) const {
+    return get_node(index)->data;
+}
+
+template<class T>
+typename LinkedList<T>::Node* LinkedList<T>::get_head() const {
+    return head_;
 }
 
 template<class T>
@@ -168,4 +178,24 @@ LinkedList<T>* LinkedList<T>::concat(LinkedList<T>* list) {
         current = current->next;
     }
     return new_list;
+}
+
+template<class T>
+ListIterator<T> LinkedList<T>::begin() {
+    return ListIterator<T>(head_);
+}
+
+template<class T>
+ListIterator<T> LinkedList<T>::end() {
+    return ListIterator<T>(nullptr);
+}
+
+template<class T>
+ListIterator<T> LinkedList<T>::begin() const {
+    return ListIterator<T>(head_);
+}
+
+template<class T>
+ListIterator<T> LinkedList<T>::end() const {
+    return ListIterator<T>(nullptr);
 }

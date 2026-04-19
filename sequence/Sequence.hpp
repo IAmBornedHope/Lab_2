@@ -16,5 +16,6 @@ public:
     virtual Sequence<T>* prepend(T temp) = 0;
     virtual Sequence<T>* insert_at(T temp, size_t index) = 0;
     virtual Sequence<T>* concat(Sequence<T>* sequence) const = 0;
+    virtual IEnumerator<T>* get_enumerator() const = 0;
 
 };

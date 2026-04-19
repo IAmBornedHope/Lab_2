@@ -32,7 +32,7 @@ public:
 
     ArrayIterator<T> begin();
     ArrayIterator<T> end();
-    IEnumerator<T>* get_enumerator() const;
+    IEnumerator<T>* get_enumerator() const override;
 };
 
 #include "ArraySequence.tpp"

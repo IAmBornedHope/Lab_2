@@ -26,7 +26,7 @@ T ArraySequence<T>::get_first() const {
         throw IndexOutOfRangeException("Пустой сиквенс");
     }
     return items_->get(0);
-}
+};
 
 template<class T>
 T ArraySequence<T>::get_last() const {
@@ -76,7 +76,7 @@ Sequence<T>* ArraySequence<T>::prepend(T temp) {
 
 template<class T>
 Sequence<T>* ArraySequence<T>::get_subsequence(size_t start_index, size_t end_index) const {
-    if (end_index >= items_->get_size() || start_index > end_index) {
+    if (end_index >= get_length() || start_index > end_index) {
         throw IndexOutOfRangeException("Некорректные индексы подпоследовательности");
     }
     ArraySequence<T>* subsequence = new ArraySequence<T>();
