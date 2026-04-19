@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include "../sequence/Sequence.hpp"
 #include "../dynamic_array/DynamicArray.hpp"
+#include "../sequence/IEnumerator.hpp"
 
 template<class T>
 class ArraySequence: public Sequence<T> {
@@ -31,8 +32,7 @@ public:
 
     ArrayIterator<T> begin();
     ArrayIterator<T> end();
-
-
+    IEnumerator<T>* get_enumerator() const;
 };
 
 #include "ArraySequence.tpp"

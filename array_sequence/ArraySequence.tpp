@@ -112,3 +112,10 @@ template<class T>
 ArrayIterator<T> ArraySequence<T>::end() {
     return items_->end();
 }
+
+template<class T>
+IEnumerator<T>* ArraySequence<T>::get_enumerator() const {
+    T* start = items_->get_data();
+    T* end = items_->get_data() + items_->get_size();
+    return new ArrayIterator<T>(start, end);
+}

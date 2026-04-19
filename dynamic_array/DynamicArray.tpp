@@ -92,6 +92,11 @@ T& DynamicArray<T>::get_reference(size_t index) {
 }
 
 template<class T>
+T* DynamicArray<T>::get_data() const {
+    return data_;
+}
+
+template<class T>
 void DynamicArray<T>::set(size_t index, T value) {
     if (index >= size_) {
         throw IndexOutOfRangeException("Индекс вне массива");
@@ -127,10 +132,10 @@ void DynamicArray<T>::resize(size_t new_size) {
 
 template<class T>
 ArrayIterator<T> DynamicArray<T>::begin() {
-    return ArrayIterator<T>(data_);
+    return ArrayIterator<T>(data_, data_ + size_);
 }
 
 template<class T>
 ArrayIterator<T> DynamicArray<T>::end() {
-    return ArrayIterator<T>(data_ + size_);
+    return ArrayIterator<T>(data_ + size_, data_ + size_);
 }

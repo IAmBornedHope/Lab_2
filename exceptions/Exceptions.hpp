@@ -37,3 +37,8 @@ class EmptyListException: public Exception {
 public:
     EmptyListException(const char* message) : Exception(message) {}
 };
+
+class IteratorPointerException: public Exception {
+public:
+    IteratorPointerException(const char* message) : Exception(message) {}
+};

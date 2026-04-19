@@ -22,6 +22,7 @@ public:
     T get(size_t index) const;
     size_t get_size() const;
     T& get_reference(size_t index);
+    T* get_data() const;
 
     void set(size_t index, T value);
     void resize(size_t new_size);

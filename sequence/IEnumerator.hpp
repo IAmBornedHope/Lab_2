@@ -1,26 +1,10 @@
 #pragma once
 
-template<class T, template<typename> class Derived>
+template<class T>
 class IEnumerator {
 public:
-    using ptr = T*;
-    using rfr = T&;
-
-    rfr operator*() {
-        return derived().operator*();
-    }
-    
-    Derived<T>& operator++() {
-        derived().operator++();
-        return *this;
-    }
-
-private:
-    Derived<T>& derived() {
-        return static_cast<Derived<T>&>(*this);
-    }
-    
-    const Derived<T>& derived() const {
-        return static_cast<const Derived<T>&>(*this);
-    }
+    virtual ~IEnumerator() = default;
+    virtual const T& get_elem() const = 0;
+    virtual void next_elem() = 0;
+    virtual bool is_end() const = 0;
 };
