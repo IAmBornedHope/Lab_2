@@ -1,10 +1,14 @@
 #include <iostream>
+#include "winsock2.h"
 #include <windows.h>
 #include "DynamicArray.hpp"
 #include "LinkedList.hpp"
 #include "ArraySequence.hpp"
 #include "Sequence.hpp"
 #include "ListSequence.hpp"
+#include "gui/app.cpp"
+
+
 
 int main() {
 
@@ -32,9 +36,6 @@ int main() {
     // ArraySequence<int> seq;
     // seq.append(4);
     // std::cout << seq.get(0) << std::endl;
-    
-    ListSequence<int> seq;
-    seq.append(4);
-    std::cout << seq.get(0) << std::endl;
+    //int result = run_gui();
 
 }

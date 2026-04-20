@@ -39,6 +39,8 @@ TEST(dynamic_array_constructor, copy_constructor) {
     EXPECT_EQ(copy.get(2), 3);
 }
 
+
+
 TEST(dynamic_array_assignment, correct_assignment) {
     int arr[] = {12, 24, 36};
     DynamicArray<int> source(arr, 3);
@@ -63,4 +65,181 @@ TEST(dynamic_array_assignment, self_assignment) {
     EXPECT_EQ(source.get(1), 24);
     EXPECT_EQ(source.get(2), 2);
 }
+
+
+
+TEST(dynamic_array_elem_getters, correct_get_size) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_EQ(array.get_size(), 3);
+}
+
+TEST(dynamic_array_elem_getters, correct_get_first) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_EQ(array.get(0), 10);
+}
+
+TEST(dynamic_array_elem_getters, correct_get_last) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_EQ(array.get(2), 20);
+}
+
+TEST(dynamic_array_elem_getters, correct_get_at) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_EQ(array.get(1), 15);
+}
+
+TEST(dynamic_array_elem_getters, get_out_of_array) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.get(3), IndexOutOfRangeException);
+}
+
+TEST(dynamic_array_elem_getters, get_at_below_zero) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.get(-1), IndexOutOfRangeException);
+}
+
+
+
+TEST(dynamic_array_ref_getters, correct_get_ref_first) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    int& reference = array.get_reference(0);
+    reference = 67;
+    EXPECT_EQ(array.get(0), 67);
+}
+
+TEST(dynamic_array_ref_getters, correct_get_ref_last) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    int& reference = array.get_reference(2);
+    reference = 17;
+    EXPECT_EQ(array.get(2), 17);
+}
+
+TEST(dynamic_array_ref_getters, correct_get_ref_at) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    int& reference = array.get_reference(1);
+    reference = 3;
+    EXPECT_EQ(array.get(1), 3);
+}
+
+TEST(dynamic_array_ref_getters, get_ref_out_of_array) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.get_reference(5), IndexOutOfRangeException);
+}
+
+TEST(dynamic_array_ref_getters, get_ref_below_zero) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.get_reference(-1), IndexOutOfRangeException);
+}
+
+
+
+TEST(dynamic_array_data_getters, correct_get_data) {
+    int arr[] = {10, 15, 20};
+    DynamicArray<int> array(arr, 3);
+
+    int* data = array.get_data();
+
+    EXPECT_EQ(data[0], 10);
+    EXPECT_EQ(data[1], 15);
+    EXPECT_EQ(data[2], 20);
+}
+
+TEST(dynamic_array_data_getters, correct_get_data_from_empty) {
+    DynamicArray<int> array;
+    int* data = array.get_data();
+    EXPECT_EQ(data, nullptr);
+}
+
+
+
+TEST(dynamic_array_setters, correct_set_first) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.set(0, 999);
+    EXPECT_EQ(array.get(0), 999);
+}
+
+TEST(dynamic_array_setters, correct_set_last) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.set(2, 999);
+    EXPECT_EQ(array.get(2), 999);
+}
+
+TEST(dynamic_array_setters, correct_set_at) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.set(1, 999);
+    EXPECT_EQ(array.get(1), 999);
+}
+
+TEST(dynamic_array_setters, set_at_out_of_array) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.set(5, 999), IndexOutOfRangeException);
+}
+
+TEST(dynamic_array_setters, set_at_below_zero) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    EXPECT_THROW(array.set(-1, 999), IndexOutOfRangeException);
+}
+
+
+
+TEST(dynamic_array_resize, correct_resize_bigger) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.resize(10);
+
+    ASSERT_EQ(array.get_size(), 10);
+    EXPECT_EQ(array.get(0), 1);
+    EXPECT_EQ(array.get(1), 5);
+    EXPECT_EQ(array.get(2), 10);
+}
+
+TEST(dynamic_array_resize, correct_resize_smaller) {
+    int arr[] = {1, 5, 10, 15, 20};
+    DynamicArray<int> array(arr, 5);
+    array.resize(3);
+
+    ASSERT_EQ(array.get_size(), 3);
+    EXPECT_EQ(array.get(0), 1);
+    EXPECT_EQ(array.get(1), 5);
+    EXPECT_EQ(array.get(2), 10);
+    EXPECT_THROW(array.get(3), IndexOutOfRangeException);
+}
+
+TEST(dynamic_array_resize, correct_resize_same_size) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.resize(3);
+
+    ASSERT_EQ(array.get_size(), 3);
+    EXPECT_EQ(array.get(0), 1);
+    EXPECT_EQ(array.get(1), 5);
+    EXPECT_EQ(array.get(2), 10);
+    EXPECT_THROW(array.get(3), IndexOutOfRangeException);
+}
+
+TEST(dynamic_array_resize, correct_resize_zero_size) {
+    int arr[] = {1, 5, 10};
+    DynamicArray<int> array(arr, 3);
+    array.resize(0);
+
+    ASSERT_EQ(array.get_size(), 0);
+    EXPECT_THROW(array.get(0), IndexOutOfRangeException);
+}
+
 
