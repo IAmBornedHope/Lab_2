@@ -47,7 +47,7 @@ size_t ArraySequence<T>::get_length() const {
 }
 
 template<class T>
-Sequence<T>* ArraySequence<T>::append(T temp) {
+ArraySequence<T>* ArraySequence<T>::append_internal(T temp) {
     size_t size = items_->get_size();
     items_->resize(size + 1);
     items_->set(size, temp);
@@ -55,7 +55,13 @@ Sequence<T>* ArraySequence<T>::append(T temp) {
 }
 
 template<class T>
-Sequence<T>* ArraySequence<T>::insert_at(T temp, size_t index) {
+ArraySequence<T>* ArraySequence<T>::prepend_internal(T temp) {
+    insert_at_internal(temp, 0);
+    return this;
+}
+
+template<class T>
+ArraySequence<T>* ArraySequence<T>::insert_at_internal(T temp, size_t index) {
     size_t size = items_->get_size();
     if (index > size) {
         throw IndexOutOfRangeException("Индекс вне сиквенса");
@@ -69,9 +75,24 @@ Sequence<T>* ArraySequence<T>::insert_at(T temp, size_t index) {
 }
 
 template<class T>
+Sequence<T>* ArraySequence<T>::append(T temp) {
+    ArraySequence<T>* target = instance();
+    target->append_internal(temp);
+    return target;
+}
+
+template<class T>
 Sequence<T>* ArraySequence<T>::prepend(T temp) {
-    insert_at(temp, 0);
-    return this;
+    ArraySequence<T>* target = instance();
+    target->prepend_internal(temp);
+    return target;
+}
+
+template<class T>
+Sequence<T>* ArraySequence<T>::insert_at(T temp, size_t index) {
+    ArraySequence<T>* target = instance();
+    target->insert_at_internal(temp, index);
+    return target;
 }
 
 template<class T>
@@ -79,7 +100,7 @@ Sequence<T>* ArraySequence<T>::get_subsequence(size_t start_index, size_t end_in
     if (end_index >= get_length() || start_index > end_index) {
         throw IndexOutOfRangeException("Некорректные индексы подпоследовательности");
     }
-    ArraySequence<T>* subsequence = new ArraySequence<T>();
+    ArraySequence<T>* subsequence = construct_empty();
     for (size_t cur = start_index; cur <= end_index; ++cur) {
         subsequence->append(items_->get(cur));
     }
@@ -91,16 +112,15 @@ Sequence<T>* ArraySequence<T>::concat(Sequence<T>* sequence) const {
     if (sequence == nullptr) {
         throw NullPointerException("Передан нулевой указатель");
     }
-    ArraySequence<T>* new_sequence = new ArraySequence<T>(*this);
+    ArraySequence<T>* new_sequence = construct_empty();
+
+    for (size_t index = 0; index < this->get_length(); ++index) {
+        new_sequence->append(this->get(index));
+    }
     for (size_t index = 0; index < sequence->get_length(); ++index) {
         new_sequence->append(sequence->get(index));
     }
     return new_sequence;
-}
-
-template<class T>
-T& ArraySequence<T>::operator[](size_t index) {
-    return items_->get_reference(index);
 }
 
 template<class T>
@@ -122,19 +142,19 @@ IEnumerator<T>* ArraySequence<T>::get_enumerator() const {
 
 template<class T>
 Sequence<T>* ArraySequence<T>::map(T (*func)(T)) {
-    ArraySequence<T>* mapped = new ArraySequence<T>();
+    ArraySequence<T>* mapped = construct_empty();
     for (auto& item : *this) {
-        mapped->append(func(item));
+        mapped->append_internal(func(item));
     }
     return mapped;
 }
 
 template<class T>
 Sequence<T>* ArraySequence<T>::where(bool (*predicate)(T)) {
-    ArraySequence<T>* filtered = new ArraySequence<T>();
+    ArraySequence<T>* filtered = construct_empty();
     for (auto& item : *this) {
         if (predicate(item)) {
-            filtered->append(item);
+            filtered->append_internal(item);
         }
     }
     return filtered;
