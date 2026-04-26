@@ -41,21 +41,42 @@ size_t ListSequence<T>::get_length() const {
 }
 
 template<class T>
-Sequence<T>* ListSequence<T>::append(T temp) {
+ListSequence<T>* ListSequence<T>::append_internal(T temp) {
     items_->append(temp);
     return this;
 }
 
 template<class T>
-Sequence<T>* ListSequence<T>::insert_at(T temp, size_t index) {
+ListSequence<T>* ListSequence<T>::insert_at_internal(T temp, size_t index) {
     items_->insert_at(temp, index);
     return this;
 }
 
 template<class T>
-Sequence<T>* ListSequence<T>::prepend(T temp) {
+ListSequence<T>* ListSequence<T>::prepend_internal(T temp) {
     items_->prepend(temp);
     return this;
+}
+
+template<class T>
+Sequence<T>* ListSequence<T>::append(T temp) {
+    ListSequence<T>* target = instance();
+    target->append_internal(temp);
+    return target;
+}
+
+template<class T>
+Sequence<T>* ListSequence<T>::prepend(T temp) {
+    ListSequence<T>* target = instance();
+    target->prepend_internal(temp);
+    return target;
+}
+
+template<class T>
+Sequence<T>* ListSequence<T>::insert_at(T temp, size_t index) {
+    ListSequence<T>* target = instance();
+    target->insert_at_internal(temp, index);
+    return target;
 }
 
 template<class T>
@@ -63,7 +84,7 @@ Sequence<T>* ListSequence<T>::get_subsequence(size_t start_index, size_t end_ind
     if (end_index >= get_length() || start_index > end_index) {
         throw IndexOutOfRangeException("ListSequence: get_subsequence. Некорректные индексы для подпоследовательности.");
     }
-    ListSequence<T>* subsequence = new ListSequence<T>();
+    ListSequence<T>* subsequence = construct_empty();
     for (size_t cur = start_index; cur <= end_index; ++cur) {
         subsequence->append(items_->get(cur));
     }
@@ -75,16 +96,15 @@ Sequence<T>* ListSequence<T>::concat(Sequence<T>* sequence) const {
     if (sequence == nullptr) {
         throw NullPointerException("ListSequence: concat. Передан нулевой указатель.");
     }
-    ListSequence<T>* new_sequence = new ListSequence<T>(*this);
+    ListSequence<T>* new_sequence = construct_empty();
+
+    for (size_t index = 0; index < this->get_length(); ++index) {
+        new_sequence->append(this->get(index));
+    }
     for (size_t index = 0; index < sequence->get_length(); ++index) {
         new_sequence->append(sequence->get(index));
     }
     return new_sequence;
-}
-
-template<class T>
-T& ListSequence<T>::operator[](size_t index) {
-    return items_->get_reference(index);
 }
 
 template<class T>
@@ -104,27 +124,27 @@ IEnumerator<T>* ListSequence<T>::get_enumerator() const {
 
 template<class T>
 Sequence<T>* ListSequence<T>::map(T (*func)(T)) {
-    ListSequence<T>* mapped = new ListSequence<T>();
+    ListSequence<T>* mapped = construct_empty();
     for (auto& item : *this) {
-        mapped->append(func(item));
+        mapped->append_internal(func(item));
     }
     return mapped;
 }
 
 template<class T>
 Sequence<T>* ListSequence<T>::where(bool (*predicate)(T)) {
-    ListSequence<T>* filtered = new ListSequence<T>();
+    ListSequence<T>* filtered = construct_empty();
     for (auto& item : *this) {
         if (predicate(item)) {
-            filtered->append(item);
+            filtered->append_internal(item);
         }
     }
     return filtered;
 }
 
 template<class T>
-T ListSequence<T>::reduce(T (*func)(T, T), T starter) {
-    T reduced = starter;
+T ListSequence<T>::reduce(T (*func)(T, T), T accumulator) {
+    T reduced = accumulator;
     for (auto& item : *this) {
         reduced = func(reduced, item);
     }
