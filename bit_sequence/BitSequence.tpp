@@ -258,3 +258,59 @@ BitSequence<T> BitSequence<T>::operator^(const BitSequence<T>& sequence) const {
     delete temp;
     return result;
 }
+
+template<integral T>
+BitIterator<T> BitSequence<T>::begin() {
+    return BitIterator<T>(this, 0, size_);
+}
+
+template<integral T>
+BitIterator<T> BitSequence<T>::end() {
+    return BitIterator<T>(this, size_, size_);
+}
+
+template<integral T>
+BitIterator<T> BitSequence<T>::begin() const {
+    return BitIterator<T>(this, 0, size_);
+}
+
+template<integral T>
+BitIterator<T> BitSequence<T>::end() const {
+    return BitIterator<T>(this, size_, size_);
+}
+
+template<integral T>
+IEnumerator<Bit<T>>* BitSequence<T>::get_enumerator() const {
+    IEnumerator<Bit<T>>* ptr = new BitIterator<T>(this, 0, size_);
+    return ptr;
+}
+
+template<integral T>
+Sequence<Bit<T>>* BitSequence<T>::map(Bit<T> (*func)(Bit<T>)) {
+    BitSequence<T>* mapped = new BitSequence<T>();
+    for (const auto& item : *this) {
+        Bit<T> mapped_bit = func(item);
+        mapped->append(mapped_bit);
+    }
+    return mapped;
+}
+
+template<integral T>
+Sequence<Bit<T>>* BitSequence<T>::where(bool (*predicate)(Bit<T>)) {
+    BitSequence<T>* filtered = new BitSequence<T>();
+    for (const auto& item : *this) {
+        if (predicate(item)) {
+            filtered->append(item);
+        }
+    }
+    return filtered;
+}
+
+template<integral T>
+Bit<T> BitSequence<T>::reduce(Bit<T> (*func)(Bit<T>, Bit<T>), Bit<T> accumulator) {
+    Bit<T> reduced = accumulator;
+    for (const auto& item : *this) {
+        reduced = func(reduced, item);
+    }
+    return reduced;
+}

@@ -201,7 +201,6 @@ TEST(bit_sequence_operations, concat_nullptr) {
     bool array[] = {0, 1};
     BitSequence<int> sequence(array, 2);
     EXPECT_THROW(sequence.concat(nullptr), NullPointerException);
-
 }
 
 TEST(bit_sequence_operations, correct_and_operation) {
@@ -272,5 +271,61 @@ TEST(bit_sequence_operations, length_mismatch) {
     BitSequence<int> first(array_1, 5);
     BitSequence<int> second(array_2, 4);
     EXPECT_THROW(first.And(second), SequenceLengthMismatchException);
+}
+
+
+
+TEST(bit_sequence_functions, correct_map) {
+    bool array[] = {0, 0, 1, 1};
+    BitSequence<int> sequence(array, 4);
+
+    auto flip = [](Bit<int> bit) {
+        return Bit<int>(!bit.get_bit_at(0));
+    };
+
+    Sequence<Bit<int>>* mapped = sequence.map(flip);
+    ASSERT_EQ(mapped->get_length(), 4);
+    EXPECT_EQ(mapped->get(0).get_bit_at(0), 1);
+    EXPECT_EQ(mapped->get(1).get_bit_at(0), 1);
+    EXPECT_EQ(mapped->get(2).get_bit_at(0), 0);
+    EXPECT_EQ(mapped->get(3).get_bit_at(0), 0);
+    delete mapped;
+}
+
+TEST(bit_sequence_functions, correct_where) {
+    bool array[] = {0, 0, 1, 1};
+    BitSequence<int> sequence(array, 4);
+
+    auto pred = [](Bit<int> bit) {
+        return bit.get_bit_at(0);
+    };
+
+    Sequence<Bit<int>>* filtered = sequence.where(pred);
+    ASSERT_EQ(filtered->get_length(), 2);
+    EXPECT_EQ(filtered->get(0).get_bit_at(0), 1);
+    EXPECT_EQ(filtered->get(1).get_bit_at(0), 1);
+    delete filtered;
+}
+
+TEST(bit_sequence_functions, correct_reduce) {
+    bool array[] = {0, 0, 1, 1};
+    BitSequence<int> sequence(array, 4);
+
+    auto reducer = [](Bit<int> a, Bit<int> b) {
+        return Bit<int>(a.get_bit_at(0) || b.get_bit_at(0));
+    };
+    Bit<int> reduced = sequence.reduce(reducer, Bit<int>(0));
+    EXPECT_EQ(reduced.get_bit_at(0), 1);
+}
+
+TEST(bit_sequence_functions, correct_reduce_2) {
+    bool array[] = {0, 0, 0, 0};
+    BitSequence<int> sequence(array, 4);
+
+    auto reducer = [](Bit<int> a, Bit<int> b) {
+        return Bit<int>(a.get_bit_at(0) || b.get_bit_at(0));
+    };
+    Bit<int> reduced = sequence.reduce(reducer, Bit<int>(0));
+    EXPECT_EQ(reduced.get_bit_at(0), 0);
 }
 

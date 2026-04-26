@@ -1,6 +1,8 @@
 #pragma once
 #include <stdexcept>
 #include <cstddef>
+#include "IEnumerator.hpp"
+#include "../bit_sequence/BitIterator.hpp"
 
 template<class T>
 class Sequence {
@@ -16,10 +18,10 @@ public:
     virtual Sequence<T>* prepend(T temp) = 0;
     virtual Sequence<T>* insert_at(T temp, size_t index) = 0;
     virtual Sequence<T>* concat(Sequence<T>* sequence) const = 0;
-    // virtual IEnumerator<T>* get_enumerator() const = 0;
+    virtual IEnumerator<T>* get_enumerator() const = 0;
 
-    // virtual Sequence<T>* map(T (*func)(T)) = 0;
-    // virtual Sequence<T>* where(bool (*predicate)(T)) = 0;
-    // virtual T reduce(T (*func)(T, T), T starter) = 0;
+    virtual Sequence<T>* map(T (*func)(T)) = 0;
+    virtual Sequence<T>* where(bool (*predicate)(T)) = 0;
+    virtual T reduce(T (*func)(T, T), T starter) = 0;
 
 };

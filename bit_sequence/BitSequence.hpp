@@ -5,6 +5,7 @@
 #include "../dynamic_array/DynamicArray.hpp"
 
 using std::integral;
+template <integral T> class BitIterator;
 
 template<integral T>
 class Bit {
@@ -64,8 +65,19 @@ public:
     BitSequence<T> operator~() const;
     BitSequence<T> operator^(const BitSequence<T>& sequence) const;
 
+    BitIterator<T> begin();
+    BitIterator<T> end();
+    BitIterator<T> begin() const;
+    BitIterator<T> end() const;
+    IEnumerator<Bit<T>>* get_enumerator() const override;
+
+    Sequence<Bit<T>>* map(Bit<T> (*func)(Bit<T>)) override;
+    Sequence<Bit<T>>* where(bool (*predicate)(Bit<T>)) override;
+    Bit<T> reduce(Bit<T> (*func)(Bit<T>, Bit<T>), Bit<T> accumulator) override;
+
 };
 
+#include "BitIterator.hpp"
 #include "BitSequence.tpp"
 
 
