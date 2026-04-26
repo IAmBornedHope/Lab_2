@@ -13,6 +13,9 @@ BitSequence<T>::BitSequence(const BitSequence<T>& source_sequence) : size_(sourc
 
 template<integral T>
 BitSequence<T>::BitSequence(bool* bits, size_t count) : data_(nullptr), size_(count) {
+    if (bits == nullptr) {
+        throw NullPointerException("Передан нулевой указатель");
+    }
     size_t batches = get_batch_count();
     data_ = new DynamicArray<T>(batches);
 
