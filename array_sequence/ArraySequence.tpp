@@ -23,7 +23,7 @@ ArraySequence<T>::~ArraySequence() {
 template<class T>
 T ArraySequence<T>::get_first() const {
     if (items_->get_size() == 0) {
-        throw IndexOutOfRangeException("ArraySequence: get_first. Последовательность пуста.");
+        throw EmptyListException("ArraySequence: get_first. Последовательность пуста.");
     }
     return items_->get(0);
 };
@@ -31,7 +31,7 @@ T ArraySequence<T>::get_first() const {
 template<class T>
 T ArraySequence<T>::get_last() const {
     if (items_->get_size() == 0) {
-        throw IndexOutOfRangeException("ArraySequence: get_last. Последовательность пуста.");
+        throw EmptyListException("ArraySequence: get_last. Последовательность пуста.");
     }
     return items_->get(items_->get_size() - 1);
 }
