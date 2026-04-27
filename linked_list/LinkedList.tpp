@@ -124,7 +124,7 @@ void LinkedList<T>::prepend(T item) {
 
 template<class T>
 void LinkedList<T>::insert_at(T item, size_t index) {
-    if (index >= length_) {
+    if (index > length_) {
         throw IndexOutOfRangeException("LinkedList: insert_at. Индекс вне списка.");
     }
     if (index == length_) {
@@ -146,6 +146,20 @@ void LinkedList<T>::insert_at(T item, size_t index) {
 
         length_++;
     }
+}
+
+template<class T>
+void LinkedList<T>::clear() {
+    Node* current = head_;
+    while (current != nullptr) {
+        Node* next = current->next;
+        delete current;
+        current = next;
+    }
+
+    head_ = nullptr;
+    tail_ = nullptr;
+    length_ = 0;
 }
 
 template<class T>

@@ -19,6 +19,7 @@ public:
     virtual Sequence<T>* insert_at(T temp, size_t index) = 0;
     virtual Sequence<T>* concat(Sequence<T>* sequence) const = 0;
     virtual IEnumerator<T>* get_enumerator() const = 0;
+    virtual void clear() = 0;
 
     virtual Sequence<T>* map(T (*func)(T)) = 0;
     virtual Sequence<T>* where(bool (*predicate)(T)) = 0;

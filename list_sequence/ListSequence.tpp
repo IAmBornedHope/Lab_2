@@ -41,6 +41,11 @@ size_t ListSequence<T>::get_length() const {
 }
 
 template<class T>
+void ListSequence<T>::clear() {
+    items_->clear();
+}
+
+template<class T>
 ListSequence<T>* ListSequence<T>::append_internal(T temp) {
     items_->append(temp);
     return this;

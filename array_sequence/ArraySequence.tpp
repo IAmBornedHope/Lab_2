@@ -47,6 +47,11 @@ size_t ArraySequence<T>::get_length() const {
 }
 
 template<class T>
+void ArraySequence<T>::clear() {
+    this->items_->resize(0);
+}
+
+template<class T>
 ArraySequence<T>* ArraySequence<T>::append_internal(T temp) {
     size_t size = items_->get_size();
     items_->resize(size + 1);

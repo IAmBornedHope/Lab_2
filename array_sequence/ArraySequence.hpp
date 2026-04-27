@@ -27,6 +27,7 @@ public:
     T get_last() const override;
     T get(size_t index) const override;
     size_t get_length() const override;
+    void clear() override;
 
     Sequence<T>* append(T temp) override;
     Sequence<T>* prepend(T temp) override;

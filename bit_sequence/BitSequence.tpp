@@ -109,6 +109,11 @@ size_t BitSequence<T>::get_length() const {
 }
 
 template<integral T>
+void BitSequence<T>::clear() {
+    this->data_->resize(0);
+}
+
+template<integral T>
 Sequence<Bit<T>>* BitSequence<T>::insert_at(Bit<T> temp, size_t index) {
     if (index > size_) {
         throw IndexOutOfRangeException("BitSequence: insert_at. Индекс вне последовательности.");

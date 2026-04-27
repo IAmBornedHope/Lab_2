@@ -49,6 +49,7 @@ public:
     Bit<T> get(size_t index) const override;
     size_t get_length() const override;
     Sequence<Bit<T>>* get_subsequence(size_t start_index, size_t end_index) const override;
+    void clear() override;
 
     Sequence<Bit<T>>* append(Bit<T> temp) override;
     Sequence<Bit<T>>* prepend(Bit<T> temp) override;

@@ -40,6 +40,7 @@ public:
     void append(T item);
     void prepend(T item);
     void insert_at(T item, size_t index);
+    void clear();
     
     LinkedList<T>* get_sublist(size_t start_index, size_t end_index) const;
     LinkedList<T>* concat(LinkedList<T>* list);

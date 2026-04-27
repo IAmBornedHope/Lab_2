@@ -1,5 +1,5 @@
 
-add_library(lab_gui STATIC app.cpp)
+add_library(lab_gui STATIC app.cpp main.cpp)
 
 target_link_libraries(lab_gui PUBLIC wx::core wx::base)
 
