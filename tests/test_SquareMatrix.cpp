@@ -176,6 +176,38 @@ TEST(matrix_operations, incorrect_matrix_add_test) {
     EXPECT_THROW(result = matrix_1.add(matrix_2), MatrixSizeMismatchException);
 }
 
+TEST(matrix_operations, correct_matrix_multiply_test) {
+    SquareMatrix<Complex<double>, MutableArraySequence> matrix_1{
+        {Complex<double>{1.1, 2.2}, Complex<double>{3.3, 4.4}},
+        {Complex<double>{4.4, 3.3}, Complex<double>{2.2, 1.1}}
+    };
+    SquareMatrix<Complex<double>, MutableArraySequence> matrix_2{
+        {Complex<double>{2.2, 1.1}, Complex<double>{4.4, 3.3}},
+        {Complex<double>{3.3, 4.4}, Complex<double>{1.1, 2.2}}
+    };
+    Complex<double> z1{-8.47,35.09};
+    Complex<double> z2{-8.47, 25.41};
+    Complex<double> z3{8.47, 25.41};
+    Complex<double> z4{8.47, 35.09};
+
+    auto result = matrix_1.multiply(matrix_2);
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], z1);
+    EXPECT_EQ(result[0][1], z2);
+    EXPECT_EQ(result[1][0], z3);
+    EXPECT_EQ(result[1][1], z4);
+}
+
+TEST(matrix_operations, incorrect_matrix_multiply_test) {
+    SquareMatrix<Complex<double>, MutableArraySequence> matrix_1 = {
+        {Complex<double>{}, Complex<double>{}}, 
+        {Complex<double>{}, Complex<double>{}}};
+    SquareMatrix<Complex<double>, MutableArraySequence> matrix_2 = {{Complex<double>{}}};
+    
+    SquareMatrix<Complex<double>, MutableArraySequence> result{};
+    EXPECT_THROW(result = matrix_1.multiply(matrix_2), MatrixSizeMismatchException);
+}
+
 TEST(matrix_operations, matrix_on_scalar_test) {
     SquareMatrix<int, MutableArraySequence> matrix_1 = {{1, 2}, {3, 4}};
     int scalar = 8;

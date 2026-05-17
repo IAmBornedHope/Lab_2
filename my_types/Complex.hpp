@@ -58,7 +58,9 @@ public:
         if constexpr(std::is_integral_v<T>) {
             return (re_ == other.re_) && (im_ == other.im_);
         }
-        return (abs((re_ - other.re_)) < std::numeric_limits<T>::epsilon()) && (abs((im_ - other.im_)) < std::numeric_limits<T>::epsilon());
+        T epsilon = 1000 * std::max({std::abs(re_), std::abs(im_), std::abs(other.re_), std::abs(other.im_)}) * std::numeric_limits<T>::epsilon();
+
+        return (std::abs((re_ - other.re_)) < epsilon) && (std::abs((im_ - other.im_)) < epsilon);
     }
 
     bool operator!=(const Complex& other) const {
@@ -78,7 +80,7 @@ public:
 
         double new_re = static_cast<double>(re_);
         double new_im = static_cast<double>(im_);
-
+//// simplify 1-2 expr
         if (re_ == 0 && im_ == 0) {
             return "0";
         }
