@@ -278,3 +278,20 @@ auto SquareMatrix<T, Container>::end() const {
     return items_->end();
 }
 
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
+auto SquareMatrix<T, Container>::operator+(const SquareMatrix<T, Container>& matrix) const {
+    return this->add(matrix);
+}
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
+auto SquareMatrix<T, Container>::operator-(const SquareMatrix<T, Container>& matrix) const {
+    return this->add(matrix.multiply_on_scalar(-1));
+}
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
+auto SquareMatrix<T, Container>::operator*(const SquareMatrix<T, Container>& matrix) const {
+    return this->multiply(matrix);
+}

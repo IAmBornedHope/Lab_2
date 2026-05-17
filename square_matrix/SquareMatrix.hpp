@@ -64,8 +64,7 @@ public:
 
     MatrixProxy<T, Container> operator[](size_t row);
     ConstMatrixProxy<T, Container> operator[](size_t row) const;
-    ///op + - *
-
+    
     // inverse
 
     auto add(const SquareMatrix<T, Container>& matrix) const;
@@ -87,6 +86,23 @@ public:
     auto begin() const;
     auto end() const;
 
+    auto operator+(const SquareMatrix<T, Container>& matrix) const;
+    auto operator-(const SquareMatrix<T, Container>& matrix) const;
+    auto operator*(const SquareMatrix<T, Container>& matrix) const;
+
+
 };
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
+auto operator*(const SquareMatrix<T, Container>& matrix, T scalar) {
+    return matrix.multiply_on_scalar(scalar);
+}
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
+auto operator*(T scalar, const SquareMatrix<T, Container>& matrix) {
+    return matrix.multiply_on_scalar(scalar);
+}
 
 #include "SquareMatrix.tpp"
