@@ -121,7 +121,7 @@ template<typename T, template<typename> class Container>
 requires Stackable<Container<T>, T>
 auto Stack<T, Container>::get_substack(size_t start_index, size_t end_index) const {
     if (end_index >= get_length() || start_index > end_index) {
-        throw IndexOutOfRangeException("Stack: get_substack. Некорректные индексы для подпоследовательности.");
+        throw IndexOutOfRangeException(start_index, end_index, get_length());
     }
     Stack<T, Container> substack;
     size_t current = 0;

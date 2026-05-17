@@ -17,7 +17,11 @@ public:
 
 class IndexOutOfRangeException: public Exception {
 public:
-    IndexOutOfRangeException(size_t index, size_t size) 
+
+    IndexOutOfRangeException(size_t index_1, size_t index_2, size_t size) 
+    : Exception(std::format("Индексы за границами: {}-{} (Размер - {})", index_1, index_2, size)) {}
+
+    explicit IndexOutOfRangeException(size_t index, size_t size) 
         : Exception(std::format("Индекс за границами: {} (Размер - {})", index, size)) {}
 
     explicit IndexOutOfRangeException(size_t index) 
