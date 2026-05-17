@@ -12,9 +12,7 @@ ArraySequence<T>::ArraySequence(T* array, size_t count) {
 }
 
 template<class T>
-ArraySequence<T>::ArraySequence(const ArraySequence<T>& source_sequence) {
-    items_ = new DynamicArray<T>(*source_sequence.items_);
-}
+ArraySequence<T>::ArraySequence(const ArraySequence<T>& source_sequence) : items_{new DynamicArray<T>(*source_sequence.items_)} {}
 
 template<class T>
 ArraySequence<T>& ArraySequence<T>::operator=(const ArraySequence<T>& sequence) {

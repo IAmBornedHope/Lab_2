@@ -7,9 +7,7 @@ template<class T>
 ListSequence<T>::ListSequence() : items_(new LinkedList<T>()) {}
 
 template<class T>
-ListSequence<T>::ListSequence(T* items, size_t count) {
-    items_ = new LinkedList<T>(items, count);
-}
+ListSequence<T>::ListSequence(T* items, size_t count) : items_{new LinkedList<T>(items, count)} {}
 
 template<class T>
 ListSequence<T>::ListSequence(const ListSequence<T>& list) {
