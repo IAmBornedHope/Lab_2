@@ -242,6 +242,66 @@ TEST(matrix_operations, complex_norm_test) {
 
 
 
+TEST(matrix_operators, operator_plus_test) {
+    SquareMatrix<int, MutableArraySequence> matrix_1 = {{1, 2}, {3, 4}};
+    SquareMatrix<int, MutableArraySequence> matrix_2 = {{1, 2}, {3, 4}};
+    auto result = matrix_1 + matrix_2;
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], 2);
+    EXPECT_EQ(result[0][1], 4);
+    EXPECT_EQ(result[1][0], 6);
+    EXPECT_EQ(result[1][1], 8);
+}
+
+TEST(matrix_operators, operator_minus_test) {
+    SquareMatrix<int, MutableArraySequence> matrix_1 = {{1, 2}, {3, 4}};
+    SquareMatrix<int, MutableArraySequence> matrix_2 = {{1, 2}, {3, 4}};
+    auto result = matrix_1 - matrix_2;
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], 0);
+    EXPECT_EQ(result[0][1], 0);
+    EXPECT_EQ(result[1][0], 0);
+    EXPECT_EQ(result[1][1], 0);
+}
+
+TEST(matrix_operators, operator_multiply_test) {
+    SquareMatrix<int, MutableArraySequence> matrix_1 = {{1, 2}, {3, 4}};
+    SquareMatrix<int, MutableArraySequence> matrix_2 = {{1, 2}, {3, 4}};
+    auto result = matrix_1 * matrix_2;
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], 7);
+    EXPECT_EQ(result[0][1], 10);
+    EXPECT_EQ(result[1][0], 15);
+    EXPECT_EQ(result[1][1], 22);
+}
+
+TEST(matrix_operators, operator_left_multiply_on_scalar_test) {
+    SquareMatrix<int, MutableArraySequence> matrix = {{1, 2}, {3, 4}};
+    auto result = 4 * matrix;
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], 4);
+    EXPECT_EQ(result[0][1], 8);
+    EXPECT_EQ(result[1][0], 12);
+    EXPECT_EQ(result[1][1], 16);
+}
+
+TEST(matrix_operators, operator_right_multiply_on_scalar_test) {
+    SquareMatrix<int, MutableArraySequence> matrix = {{1, 2}, {3, 4}};
+    auto result = matrix * 4;
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], 4);
+    EXPECT_EQ(result[0][1], 8);
+    EXPECT_EQ(result[1][0], 12);
+    EXPECT_EQ(result[1][1], 16);
+}
+
+
+
 TEST(matrix_swap_transformation, correct_swap_rows_test) {
     SquareMatrix<int, MutableArraySequence> matrix = {{1, 2}, {3, 4}};
     matrix.swap_rows(0, 1);
