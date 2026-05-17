@@ -17,6 +17,7 @@ private:
 public:
     Complex() : re_{}, im_{} {}
 
+    Complex(T re) : re_{re}, im_{} {};
     Complex(T re, T im) : re_{re}, im_{im} {}
 
     T get_re() const { return re_; }
@@ -102,4 +103,9 @@ template<Arithmetic T>
 std::ostream& operator<<(std::ostream& stream, const Complex<T>& complex) {
     stream << complex.complex_to_string();
     return stream;
+}
+
+template <Arithmetic T>
+double abs(const Complex<T>& complex) {
+    return complex.absolute();
 }

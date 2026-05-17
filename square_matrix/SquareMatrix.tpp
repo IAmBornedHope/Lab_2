@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <cmath>
 #include "SquareMatrix.hpp"
+#include "../my_types/Complex.hpp"
 
 template<typename T, template<typename> class Container>
 requires Matrixable<Container<T>, T>
@@ -178,6 +179,60 @@ double SquareMatrix<T, Container>::norm() const {
 
 template<typename T, template<typename> class Container>
 requires Matrixable<Container<T>, T>
+auto SquareMatrix<T, Container>::inverse() const {
+    if (size_ == 0) {
+        throw InvalidArgumentException("SquareMatrix: inverse. Матрица нулевого размера");
+    }
+    using std::abs;
+
+    SquareMatrix<T, Container> matrix(*this);
+    SquareMatrix<T, Container> result(size_);
+    // Единичная матрица
+    for (size_t i = 0; i < size_; ++i) {
+        for (size_t j = 0; j < size_; ++j) {
+            if (i == j) {
+                result[i][j] = T{1};
+            }
+        }
+    }
+
+    for (size_t column = 0; column < size_; ++column) {
+        size_t max_abs_row = column;
+        double max_abs_in_row = abs(matrix[column][column]);
+
+        // Максимальный для столбца элемент поднимаем наверх
+        for (size_t row = column + 1; row < size_; ++row) {
+            double temp = abs(matrix[row][column]);
+            if (temp > max_abs_in_row) {
+                max_abs_in_row = temp;
+                max_abs_row = row;
+            }
+        }
+
+        if (max_abs_in_row < 1e-12) {
+            throw DivisionByZeroException("SquareMatrix: inverse. Определитель равен 0");
+        }
+
+        matrix.swap_rows(column, max_abs_row);
+        result.swap_rows(column, max_abs_row);
+
+        // Множитель для приведения ведущего элемента к единице
+        T scale = T{1} / matrix[column][column];
+        matrix.multiply_row(column, scale);
+        result.multiply_row(column, scale);
+
+        for (size_t row = 0; row < size_; ++row) {
+            if (row == column) continue;
+            T value = matrix[row][column];
+            matrix.sum_rows_multiplied(row, column, -value);
+            result.sum_rows_multiplied(row, column, -value);
+        }
+    }
+    return result;
+}
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
 SquareMatrix<T, Container>& SquareMatrix<T, Container>::swap_rows(size_t row_1, size_t row_2) {
     if (row_1 >= size_ || row_2 >= size_) {
         throw IndexOutOfRangeException("SquareMatrix: swap_rows. Индексы строк вне матрицы.");
@@ -219,7 +274,7 @@ SquareMatrix<T, Container>& SquareMatrix<T, Container>::multiply_row(size_t row,
         throw IndexOutOfRangeException("SquareMatrix: multiply_row. Строка вне матрицы");
     }
     for (size_t column = 0; column < size_; ++column) {
-        (*this)[row][column] *= value;
+        (*this)[row][column] = (*this)[row][column] * value;
     }
     return *this;
 }
@@ -231,7 +286,7 @@ SquareMatrix<T, Container>& SquareMatrix<T, Container>::multiply_column(size_t c
         throw IndexOutOfRangeException("SquareMatrix: multiply_column. Столбец вне матрицы");
     }
     for (size_t row = 0; row < size_; ++row) {
-        (*this)[row][col] *= value;
+        (*this)[row][col] = (*this)[row][col] * value;
     }
     return *this;
 }
@@ -243,7 +298,7 @@ SquareMatrix<T, Container>& SquareMatrix<T, Container>::sum_rows_multiplied(size
         throw IndexOutOfRangeException("SquareMatrix: sum_rows_multiplied. Строка вне матрицы");
     }
     for (size_t column = 0; column < size_; ++column) {
-        (*this)[target_row][column] += (*this)[source_row][column] * value;
+        (*this)[target_row][column] = (*this)[target_row][column] + ((*this)[source_row][column] * value);
     }
     return *this;
 }
@@ -255,7 +310,7 @@ SquareMatrix<T, Container>& SquareMatrix<T, Container>::sum_columns_multiplied(s
         throw IndexOutOfRangeException("SquareMatrix: sum_columns_multiplied. Столбец вне матрицы");
     }
     for (size_t row = 0; row < size_; ++row) {
-        (*this)[row][target_col] += (*this)[row][source_col] * value;
+        (*this)[row][target_col] = (*this)[row][target_col] + ((*this)[row][source_col] * value);
     }
     return *this;
 }

@@ -64,12 +64,11 @@ public:
 
     MatrixProxy<T, Container> operator[](size_t row);
     ConstMatrixProxy<T, Container> operator[](size_t row) const;
-    
-    // inverse
 
     auto add(const SquareMatrix<T, Container>& matrix) const;
     auto multiply(const SquareMatrix<T, Container>& matrix) const;
     auto multiply_on_scalar(T scalar) const;
+    auto inverse() const;
     double norm() const;
 
     SquareMatrix<T, Container>& swap_rows(size_t row_1, size_t row_2);
