@@ -240,6 +240,48 @@ TEST(matrix_operations, complex_norm_test) {
     EXPECT_EQ(norm, std::sqrt(60));
 }
 
+TEST(matrix_operations, complex_matrix_inverse_test) {
+    SquareMatrix<Complex<double>, MutableArraySequence> matrix = {
+        {Complex<double>{2, 2}, Complex<double>{1, 1}},
+        {Complex<double>{-4, 2}, Complex<double>{2, 4}}
+    };
+    auto result = matrix.inverse();
+
+    Complex<double> z1{0.3, -0.1};
+    Complex<double> z2{-0.08, 0.06};
+    Complex<double> z3{-0.1, -0.3};
+    Complex<double> z4{0.16, -0.12};
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_EQ(result[0][0], z1);
+    EXPECT_EQ(result[0][1], z2);
+    EXPECT_EQ(result[1][0], z3);
+    EXPECT_EQ(result[1][1], z4);
+}
+
+TEST(matrix_operations, double_matrix_inverse_test) {
+    SquareMatrix<double, MutableArraySequence> matrix{{3, 2}, {-2, -3}};
+    auto result = matrix.inverse();
+
+    ASSERT_EQ(result.get_size(), 2);
+    EXPECT_NEAR(result[0][0], 0.6, 1e-12);
+    EXPECT_NEAR(result[0][1], 0.4, 1e-12);
+    EXPECT_NEAR(result[1][0], -0.4, 1e-12);
+    EXPECT_NEAR(result[1][1], -0.6, 1e-12);
+}
+
+TEST(matrix_operations, zero_matrix_test) {
+    SquareMatrix<double, MutableArraySequence> matrix{{2, 2}, {1, 1}};
+    SquareMatrix<double, MutableArraySequence> result;
+
+    EXPECT_THROW(result = matrix.inverse(), DivisionByZeroException);
+}
+
+TEST(matrix_operations, zero_matrix_size_test) {
+    SquareMatrix<double, MutableArraySequence> matrix(0);
+
+    EXPECT_THROW(matrix.inverse(), InvalidArgumentException);
+}
+
 
 
 TEST(matrix_operators, operator_plus_test) {
