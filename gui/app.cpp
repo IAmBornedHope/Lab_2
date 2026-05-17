@@ -178,6 +178,95 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, wxString::FromUTF8("Лабора
     hanoi_main_sizer->Add(hanoi_rods_sizer, 1, wxEXPAND | wxALL, 10);
     hanoi_panel->SetSizer(hanoi_main_sizer);
 
+    // ВКЛАДКА МАТРИЦ
+
+    wxPanel* matrix_panel = new wxPanel(notebook);
+    notebook->AddPage(matrix_panel, wxString::FromUTF8("Матрицы"));
+    
+    wxBoxSizer* matrix_main_sizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* create_sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* selector_sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* grid_sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* matrix_button_sizer = new wxBoxSizer(wxHORIZONTAL);
+
+    // Кнопки создания новой матрицы
+    create_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Размер новой матрицы")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+    matrix_size_ctrl = new wxSpinCtrl(matrix_panel, wxID_ANY, wxT("3"), wxDefaultPosition, wxSize(100, -1), wxSP_ARROW_KEYS, 1, 10, 3);
+    create_sizer->Add(matrix_size_ctrl, 0, wxRIGHT, 15);
+
+    button_new_matrix = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("New Matrix"));
+    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_create_matrix, this);
+    create_sizer->Add(button_new_matrix, 0, wxALL, 5);
+
+    matrix_main_sizer->Add(create_sizer, 0, wxALL | wxCENTER, 10);
+    matrix_main_sizer->Add(new wxStaticLine(matrix_panel), 0, wxEXPAND | wxALL, 10);
+
+    // Выбор используемых матриц
+    selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Первая матрица")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+    first_matrix_selector = new wxComboBox(matrix_panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
+    //first_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_first_matrix, this);
+    selector_sizer->Add(first_matrix_selector, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
+
+    selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Вторая матрица")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+    second_matrix_selector = new wxComboBox(matrix_panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
+    //first_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_second_matrix, this);
+    selector_sizer->Add(second_matrix_selector, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
+
+    // Ввод скаляра
+    input_scalar = new wxTextCtrl(matrix_panel, wxID_ANY, "");
+    selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Скаляр")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+    selector_sizer->Add(input_scalar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
+
+    button_scalar = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply on scalar"));
+    //button_scalar->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_scalar, this);
+    selector_sizer->Add(button_scalar, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+
+    matrix_main_sizer->Add(selector_sizer, 0, wxALL | wxCENTER, 5);
+
+    // Панель отображения матриц (3 боксайзера)
+    wxBoxSizer* first_matrix_sizer = new wxBoxSizer(wxVERTICAL);
+    first_matrix_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Первая матрица:")), 0, wxCENTER);
+    
+    first_grid = new wxGrid(matrix_panel, wxID_ANY);
+    //first_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_first_grid_changed, this);
+    first_matrix_sizer->Add(first_grid, 1, wxEXPAND | wxALL, 5);
+    grid_sizer->Add(first_matrix_sizer, 1, wxEXPAND);
+
+    wxBoxSizer* second_matrix_sizer = new wxBoxSizer(wxVERTICAL);
+    second_matrix_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Вторая матрица:")), 0, wxCENTER);
+    
+    second_grid = new wxGrid(matrix_panel, wxID_ANY);
+    //second_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_second_grid_changed, this);
+    second_matrix_sizer->Add(second_grid, 1, wxEXPAND | wxALL, 5);
+    grid_sizer->Add(second_matrix_sizer, 1, wxEXPAND);
+
+    wxBoxSizer* result_matrix_sizer = new wxBoxSizer(wxVERTICAL);
+    result_matrix_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Результирующая матрица:")), 0, wxCENTER);
+    
+    result_grid = new wxGrid(matrix_panel, wxID_ANY);
+    result_matrix_sizer->Add(result_grid, 1, wxEXPAND | wxALL, 5);
+    grid_sizer->Add(result_matrix_sizer, 1, wxEXPAND);
+
+    matrix_main_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, 5);
+
+    // Ряд кнопок для матрицы
+    button_new_matrix = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Add"));
+    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_add, this);
+    matrix_button_sizer->Add(button_new_matrix, 0, wxALL, 5);
+
+    button_multiply = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply"));
+    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_multiply, this);
+    matrix_button_sizer->Add(button_multiply, 0, wxALL, 5);
+
+    button_inverse = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Inverse"));
+    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_inverse, this);
+    matrix_button_sizer->Add(button_inverse, 0, wxALL, 5);
+
+    matrix_main_sizer->Add(matrix_button_sizer, 0, wxCENTER | wxALL, 5);
+
+    matrix_panel->SetSizer(matrix_main_sizer);
+
     update_comboboxes();
     update_hanoi_buttons();
     show_stack();

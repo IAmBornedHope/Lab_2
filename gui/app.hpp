@@ -4,7 +4,7 @@
 #include <wx/combobox.h>
 #include <wx/statline.h>
 #include <wx/notebook.h>
-#include <wx/timer.h>
+#include <wx/grid.h>
 #include <wx/spinctrl.h>
 #include <string>
 #include <format>
@@ -14,6 +14,11 @@
 #include "../exceptions/Exceptions.hpp"
 #include "../hanoi/HanoiTower.hpp"
 #include "../stack/Stack.hpp"
+#include "../square_matrix/SquareMatrix.hpp"
+#include "../my_types/Complex.hpp"
+
+using MyComplex = Complex<double>;
+using Matrix = SquareMatrix<Complex<double>, MutableArraySequence>;
 
 class MyFrame : public wxFrame {
 public:
@@ -93,6 +98,43 @@ private:
     wxButton* button_stop;
     wxButton* button_prev;
     wxButton* button_next;
+
+    // ВКЛАДКА МАТРИЦ
+
+    void on_create_matrix(wxCommandEvent& event);
+    void on_select_first_matrix(wxCommandEvent& event);
+    void on_select_second_matrix(wxCommandEvent& event);
+    void on_matrix_add(wxCommandEvent& event);
+    void on_matrix_multiply(wxCommandEvent& event);
+    void on_matrix_scalar(wxCommandEvent& event);
+    void on_matrix_inverse(wxCommandEvent& event);
+
+    void on_first_grid_changed(wxGridEvent& event);
+    void on_second_grid_changed(wxGridEvent& event);
+    void save_first_frid();
+    void save_second_grid();
+
+    size_t current_first_id = 0;
+    size_t current_second_id = 0;
+
+    MutableArraySequence<Matrix> matrices;
+
+    wxSpinCtrl* matrix_size_ctrl;
+
+    wxComboBox* first_matrix_selector;
+    wxComboBox* second_matrix_selector;
+
+    wxGrid* first_grid;
+    wxGrid* second_grid;
+    wxGrid* result_grid;
+
+    wxTextCtrl* input_scalar;
+
+    wxButton* button_new_matrix;
+    wxButton* button_add;
+    wxButton* button_multiply;
+    wxButton* button_scalar;
+    wxButton* button_inverse;
 
 };
 
