@@ -69,6 +69,7 @@ public:
     // inverse
 
     auto add(const SquareMatrix<T, Container>& matrix) const;
+    auto multiply(const SquareMatrix<T, Container>& matrix) const;
     auto multiply_on_scalar(T scalar) const;
     double norm() const;
 

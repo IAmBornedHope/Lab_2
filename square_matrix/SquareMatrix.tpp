@@ -127,6 +127,27 @@ auto SquareMatrix<T, Container>::add(const SquareMatrix<T, Container>& matrix) c
 
 template<typename T, template<typename> class Container>
 requires Matrixable<Container<T>, T>
+auto SquareMatrix<T, Container>::multiply(const SquareMatrix<T, Container>& matrix) const {
+    if (size_ != matrix.size_) {
+        throw MatrixSizeMismatchException("SquareMatrix: multiply. Размеры матриц не совпадают");
+    }
+    SquareMatrix<T, Container> result(size_);
+    for (size_t result_row = 0; result_row < size_; ++result_row) {
+        for (size_t result_col = 0; result_col < size_; ++result_col)  {
+            T result_elem = T{};
+            for (size_t index = 0; index < size_; ++index) {
+                result_elem = result_elem + (*this)[result_row][index] * matrix[index][result_col];
+            }
+
+            result[result_row][result_col] = result_elem;
+        }
+    }
+    return result;
+}
+
+
+template<typename T, template<typename> class Container>
+requires Matrixable<Container<T>, T>
 auto SquareMatrix<T, Container>::multiply_on_scalar(T scalar) const {
     SquareMatrix<T, Container> result(size_);
     for (size_t i = 0; i < size_; ++i) {
