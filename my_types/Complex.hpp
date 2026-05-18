@@ -81,22 +81,39 @@ public:
 
         double new_re = static_cast<double>(re_);
         double new_im = static_cast<double>(im_);
-//// simplify 1-2 expr
-        if (re_ == 0 && im_ == 0) {
-            return "0";
-        }
-        if (im_ == 0) {
-            return std::format("{:.2f}", new_re);
-        }
-        if (re_ == 0) {
-            return std::format("{:.2f}i", new_im);
-        }
-        if (im_ > 0) {
-            return std::format("{:.2f}+{:.2f}i", new_re, new_im);
-        }
-        return std::format("{:.2f}{:.2f}i", new_re, new_im);
-    }
+        std::string zero = "0";
+        std::string re_string = "";
+        std::string im_string = "";
 
+ 
+        if (new_re != 0.0) {
+            re_string = std::format("{:.2f}", new_re);
+            zero = "";
+        }
+
+        if (new_im != 0.0) {
+            im_string = std::format("{:+.2f}i", new_im);
+            zero = "";
+        }
+
+        return std::format("{}{}{}", zero, re_string, im_string);
+
+    }
+//// simplify 1-2 expr  
+    //     if (re_ == 0 && im_ == 0) {
+    //         return "0";
+    //     }
+    //     if (im_ == 0) {
+    //         return std::format("{:.2f}", new_re);
+    //     }
+    //     if (re_ == 0) {
+    //         return std::format("{:.2f}i", new_im);
+    //     }
+    //     if (im_ > 0) {
+    //         return std::format("{:.2f}+{:.2f}i", new_re, new_im);
+    //     }
+    //     return std::format("{:.2f}{:.2f}i", new_re, new_im);
+    // }
 };
 
 template<Arithmetic T>
