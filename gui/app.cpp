@@ -192,11 +192,11 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, wxString::FromUTF8("Лабора
     // Кнопки создания новой матрицы
     create_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Размер новой матрицы")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
     matrix_size_ctrl = new wxSpinCtrl(matrix_panel, wxID_ANY, wxT("3"), wxDefaultPosition, wxSize(100, -1), wxSP_ARROW_KEYS, 1, 10, 3);
-    create_sizer->Add(matrix_size_ctrl, 0, wxRIGHT, 15);
+    create_sizer->Add(matrix_size_ctrl, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
 
     button_new_matrix = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("New Matrix"));
-    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_create_matrix, this);
-    create_sizer->Add(button_new_matrix, 0, wxALL, 5);
+    button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_create_matrix, this);
+    create_sizer->Add(button_new_matrix, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
     matrix_main_sizer->Add(create_sizer, 0, wxALL | wxCENTER, 10);
     matrix_main_sizer->Add(new wxStaticLine(matrix_panel), 0, wxEXPAND | wxALL, 10);
@@ -204,32 +204,58 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, wxString::FromUTF8("Лабора
     // Выбор используемых матриц
     selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Первая матрица")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
     first_matrix_selector = new wxComboBox(matrix_panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
-    //first_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_first_matrix, this);
+    first_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_first_matrix, this);
     selector_sizer->Add(first_matrix_selector, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
 
     selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Вторая матрица")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
     second_matrix_selector = new wxComboBox(matrix_panel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
-    //first_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_second_matrix, this);
+    second_matrix_selector->Bind(wxEVT_COMBOBOX, &MyFrame::on_select_second_matrix, this);
     selector_sizer->Add(second_matrix_selector, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
 
     // Ввод скаляра
-    input_scalar = new wxTextCtrl(matrix_panel, wxID_ANY, "");
-    selector_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Скаляр")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-    selector_sizer->Add(input_scalar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
 
-    button_scalar = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply on scalar"));
-    //button_scalar->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_scalar, this);
-    selector_sizer->Add(button_scalar, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
 
     matrix_main_sizer->Add(selector_sizer, 0, wxALL | wxCENTER, 5);
+
+    // Ряд кнопок для матрицы
+
+
+    button_inverse = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Inverse"));
+    button_inverse->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_inverse, this);
+    matrix_button_sizer->Add(button_inverse, 0, wxALL, 5);
+    
+    wxStaticLine* vertical_separator_1 = new wxStaticLine(matrix_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL);
+    matrix_button_sizer->Add(vertical_separator_1, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+    button_add = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Add"));
+    button_add->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_add, this);
+    matrix_button_sizer->Add(button_add, 0, wxALL, 5);
+
+    button_multiply = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply"));
+    button_multiply->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_multiply, this);
+    matrix_button_sizer->Add(button_multiply, 0, wxALL, 5);
+
+    wxStaticLine* vertical_separator_2 = new wxStaticLine(matrix_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL);
+    matrix_button_sizer->Add(vertical_separator_2, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+
+    input_scalar = new wxTextCtrl(matrix_panel, wxID_ANY, "");
+    input_scalar->Bind(wxEVT_TEXT, &MyFrame::on_scalar_changed, this);
+    matrix_button_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Скаляр")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
+    matrix_button_sizer->Add(input_scalar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
+
+    button_scalar = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply on scalar"));
+    button_scalar->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_scalar, this);
+    matrix_button_sizer->Add(button_scalar, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
+    matrix_main_sizer->Add(matrix_button_sizer, 0, wxCENTER | wxALL, 5);
 
     // Панель отображения матриц (3 боксайзера)
     wxBoxSizer* first_matrix_sizer = new wxBoxSizer(wxVERTICAL);
     first_matrix_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Первая матрица:")), 0, wxCENTER);
     
     first_grid = new wxGrid(matrix_panel, wxID_ANY);
-    //first_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_first_grid_changed, this);
+    first_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_first_grid_changed, this);
     first_matrix_sizer->Add(first_grid, 1, wxEXPAND | wxALL, 5);
     grid_sizer->Add(first_matrix_sizer, 1, wxEXPAND);
 
@@ -237,7 +263,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, wxString::FromUTF8("Лабора
     second_matrix_sizer->Add(new wxStaticText(matrix_panel, wxID_ANY, wxString::FromUTF8("Вторая матрица:")), 0, wxCENTER);
     
     second_grid = new wxGrid(matrix_panel, wxID_ANY);
-    //second_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_second_grid_changed, this);
+    second_grid->Bind(wxEVT_GRID_CELL_CHANGED, &MyFrame::on_second_grid_changed, this);
     second_matrix_sizer->Add(second_grid, 1, wxEXPAND | wxALL, 5);
     grid_sizer->Add(second_matrix_sizer, 1, wxEXPAND);
 
@@ -250,23 +276,30 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, wxString::FromUTF8("Лабора
 
     matrix_main_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, 5);
 
-    // Ряд кнопок для матрицы
-    button_new_matrix = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Add"));
-    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_add, this);
-    matrix_button_sizer->Add(button_new_matrix, 0, wxALL, 5);
 
-    button_multiply = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Multiply"));
-    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_multiply, this);
-    matrix_button_sizer->Add(button_multiply, 0, wxALL, 5);
-
-    button_inverse = new wxButton(matrix_panel, wxID_ANY, wxString::FromUTF8("Inverse"));
-    //button_new_matrix->Bind(wxEVT_BUTTON, &MyFrame::on_matrix_inverse, this);
-    matrix_button_sizer->Add(button_inverse, 0, wxALL, 5);
-
-    matrix_main_sizer->Add(matrix_button_sizer, 0, wxCENTER | wxALL, 5);
 
     matrix_panel->SetSizer(matrix_main_sizer);
 
+    Matrix matrix_1(3);
+    for (size_t i = 0; i < 3; ++i) {
+        for (size_t j = 0; j < 3; ++j) {
+            matrix_1[i][j] = MyComplex{0, 0};
+        }
+    }
+
+    Matrix matrix_2(matrix_1);
+    matrices.append(matrix_1);
+    matrices.append(matrix_2);
+    current_first_id = 0;
+    current_second_id = 1;
+
+    update_matrix_comboboxes();
+
+    first_matrix_selector->SetSelection(0);
+    second_matrix_selector->SetSelection(1);
+    set_matrix_to_grid(first_grid, matrix_1);
+    set_matrix_to_grid(second_grid, matrix_2);
+    button_scalar->Disable();
     update_comboboxes();
     update_hanoi_buttons();
     show_stack();
@@ -345,7 +378,7 @@ void MyFrame::add_stack_to_list(const Stack<double, MutableArraySequence>& new_s
 
 Stack<double, MutableArraySequence>& MyFrame::get_active_stack() {
     if (current_stack_id >= stacks.get_length()) {
-        throw IndexOutOfRangeException("MyFrame: get_active_stack. Стека с таким индексом нет.");
+        throw IndexOutOfRangeException(current_stack_id, stacks.get_length());
     }
     return stacks.get_reference(current_stack_id);
 }
@@ -684,3 +717,266 @@ void MyFrame::hanoi_next() {
     }
 }
 
+// ЛОГИКА МАТРИЦ
+
+void MyFrame::init_matrix_grid(wxGrid* grid, size_t size) {
+    int current_rows = grid->GetNumberRows();
+    int current_columns = grid->GetNumberCols();
+
+    if (current_rows == 0 && current_columns == 0) {
+        grid->CreateGrid(size, size);
+    } else {
+        if (current_rows > size) {
+            grid->DeleteRows(size, current_rows - size);
+        }
+        if (current_columns > size) {
+            grid->DeleteCols(size, current_columns - size);
+        }
+        if (current_rows < (int)size) {
+            grid->AppendRows(size - current_rows);
+        }
+        if (current_columns < (int)size) {
+            grid->AppendCols(size - current_columns);
+        }
+    }
+    grid->SetRowLabelSize(wxGRID_AUTOSIZE);
+    grid->SetColLabelSize(wxGRID_AUTOSIZE);
+    grid->EnableEditing(true);
+    grid->SetDefaultCellAlignment(wxALIGN_CENTER, wxALIGN_CENTER);
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            grid->SetCellValue(i, j, ""); 
+        }
+    }
+}
+
+void MyFrame::update_matrix_comboboxes() {
+    int first_selected = first_matrix_selector->GetSelection();
+    int second_selected = second_matrix_selector->GetSelection();
+
+    first_matrix_selector->Clear();
+    second_matrix_selector->Clear();
+    
+    size_t count = matrices.get_length();
+
+    for (size_t number = 0; number < count; ++number) {
+        size_t current_size = matrices.get_reference(number).get_size();
+        wxString name = wxString::Format(wxString::FromUTF8("Matrix №%zu [%zux%zu]"), number + 1, current_size, current_size);
+        first_matrix_selector->Append(name);
+        second_matrix_selector->Append(name);
+    }
+    if (first_selected < count) {
+        first_matrix_selector->SetSelection(first_selected);
+        current_first_id = static_cast<size_t>(first_selected);
+    } else {
+        first_matrix_selector->SetSelection(0);
+        current_first_id = 0;
+    }
+    second_matrix_selector->SetSelection(second_selected);
+}
+
+void MyFrame::add_result_to_list(const Matrix& result) {
+    matrices.append(result);
+    update_matrix_comboboxes();
+    set_matrix_to_grid(result_grid, result);
+}
+
+Matrix MyFrame::get_matrix_from_grid(wxGrid* grid) {
+    int size = grid->GetNumberRows();
+    Matrix matrix(size);
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            matrix[i][j] = parse_complex(grid->GetCellValue(i, j));
+        }
+    }
+    return matrix;
+}
+
+void MyFrame::set_matrix_to_grid(wxGrid* grid, const Matrix& matrix) {
+    int size = matrix.get_size();
+
+    if (grid->GetNumberRows() != size) {
+        init_matrix_grid(grid, size);
+    }
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            grid->SetCellValue(i, j, complex_to_wx_string(matrix.get(i, j)));
+        }
+    }
+}
+
+void MyFrame::save_first_grid() {
+    if (matrices.get_length() != 0 && current_first_id < matrices.get_length()) {
+        Matrix updated_matrix = get_matrix_from_grid(first_grid);
+        matrices.get_reference(current_first_id) = updated_matrix;
+    }
+}
+
+void MyFrame::save_second_grid() {
+    if (matrices.get_length() != 0 && current_second_id < matrices.get_length()) {
+        Matrix updated_matrix = get_matrix_from_grid(second_grid);
+        matrices.get_reference(current_second_id) = updated_matrix;
+    }
+
+}
+
+void MyFrame::on_first_grid_changed(wxGridEvent& event) {
+    save_first_grid();
+}
+
+void MyFrame::on_second_grid_changed(wxGridEvent& event) {
+    save_second_grid();
+}
+
+void MyFrame::on_create_matrix(wxCommandEvent& event) {
+    save_first_grid();
+    save_second_grid();
+    int size = matrix_size_ctrl->GetValue();
+
+    Matrix new_matrix(static_cast<size_t>(size));
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++ j) {
+            new_matrix[i][j] = MyComplex{0, 0};
+        }
+    }
+    matrices.append(new_matrix);
+    update_matrix_comboboxes();
+    int index = static_cast<int>(matrices.get_length() - 1);
+
+    first_matrix_selector->SetSelection(index);
+    current_first_id = matrices.get_length();
+    set_matrix_to_grid(first_grid, new_matrix);
+}
+
+void MyFrame::on_select_first_matrix(wxCommandEvent& event) {
+    save_first_grid();
+    int index = first_matrix_selector->GetSelection();
+
+    current_first_id = static_cast<size_t>(index);
+    if (current_first_id < matrices.get_length()) {
+        Matrix matrix = matrices.get_reference(current_first_id);
+        set_matrix_to_grid(first_grid, matrix);
+    }
+}
+
+void MyFrame::on_select_second_matrix(wxCommandEvent& event) {
+    save_second_grid();
+    int index = second_matrix_selector->GetSelection();
+
+    current_second_id = static_cast<size_t>(index);
+    if (current_second_id < matrices.get_length()) {
+        Matrix matrix = matrices.get_reference(current_second_id);
+        set_matrix_to_grid(second_grid, matrix);
+    }
+}
+
+void MyFrame::on_matrix_add(wxCommandEvent& event) {
+    try {
+        Matrix first_matrix = get_matrix_from_grid(first_grid);
+        Matrix second_matrix = get_matrix_from_grid(second_grid);
+
+        if (first_matrix.get_size() != second_matrix.get_size()) {
+            throw MatrixSizeMismatchException("GUI. on_matrix_add", first_matrix.get_size(), second_matrix.get_size());
+        }
+        Matrix result_matrix = first_matrix.add(second_matrix);
+        add_result_to_list(result_matrix);
+    } catch (const Exception& error) {
+        wxMessageBox(wxString::FromUTF8(error.what()), wxString::FromUTF8("Ошибка!"), wxOK | wxICON_ERROR);
+    }
+}
+
+void MyFrame::on_matrix_multiply(wxCommandEvent& event) {
+    try {
+        Matrix first_matrix = get_matrix_from_grid(first_grid);
+        Matrix second_matrix = get_matrix_from_grid(second_grid);
+
+        if (first_matrix.get_size() != second_matrix.get_size()) {
+            throw MatrixSizeMismatchException("GUI. on_matrix_multiply", first_matrix.get_size(), second_matrix.get_size());
+        }
+
+        Matrix result_matrix = first_matrix.multiply(second_matrix);
+        add_result_to_list(result_matrix);
+    } catch (const Exception& error) {
+        wxMessageBox(wxString::FromUTF8(error.what()), wxString::FromUTF8("Ошибка!"), wxOK | wxICON_ERROR);
+    }
+}
+
+void MyFrame::on_matrix_scalar(wxCommandEvent& event) {
+    try {
+        Matrix matrix = get_matrix_from_grid(first_grid);
+        MyComplex scalar = parse_complex(input_scalar->GetValue());
+
+        Matrix result_matrix = matrix.multiply_on_scalar(scalar);
+        add_result_to_list(result_matrix);
+    } catch (const Exception& error) {
+        wxMessageBox(wxString::FromUTF8(error.what()), wxString::FromUTF8("Ошибка!"), wxOK | wxICON_ERROR);
+    }
+}
+
+void MyFrame::on_matrix_inverse(wxCommandEvent& event) {
+    try {
+        Matrix matrix = get_matrix_from_grid(first_grid);
+
+        Matrix result_matrix = matrix.inverse();
+        add_result_to_list(result_matrix);
+    } catch (const Exception& error) {
+        wxMessageBox(wxString::FromUTF8(error.what()), wxString::FromUTF8("Ошибка!"), wxOK | wxICON_ERROR);
+    }
+}
+
+MyComplex MyFrame::parse_complex(const wxString& str) {
+    wxString string = str;
+    if (string.IsEmpty()) {
+        return MyComplex{0, 0};
+    }
+    double re = 0.0;
+    double im = 0.0;
+
+    int i_pos = string.Find('i');
+    if (i_pos == wxNOT_FOUND) {
+        string.ToDouble(&re);
+    } else {
+        wxString before_i = string.Left(i_pos);
+        int separator_pos = -1;
+        for (int j = before_i.Length() - 1; j > 0; --j) {
+            if (before_i[j] == '+' || before_i[j] == '-') {
+                separator_pos = j;
+                break;
+            }
+        }
+        wxString re_string;
+        wxString im_string;
+
+        if (separator_pos != -1) {
+            re_string = before_i.Left(separator_pos);
+            im_string = before_i.Mid(separator_pos);
+        } else {
+            re_string = "";
+            im_string = before_i;
+        }
+        if (!re_string.IsEmpty()) {
+            re_string.ToDouble(&re);
+        }
+        if (im_string.IsEmpty() || im_string == "+") {
+            im = 1.0;
+        } else if (im_string == '-') {
+            im = -1.0;
+        } else {
+            im_string.ToDouble(&im);
+        }
+     }
+     return MyComplex(re, im);
+}
+
+wxString MyFrame::complex_to_wx_string(const MyComplex& complex) {
+    return wxString(complex.complex_to_string());
+}
+
+void MyFrame::on_scalar_changed(wxCommandEvent& event) {
+    if (input_scalar->GetValue().Trim().IsEmpty()) {
+        button_scalar->Disable();
+    } else {
+        button_scalar->Enable();
+    }
+}

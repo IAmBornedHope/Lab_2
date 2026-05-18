@@ -108,14 +108,26 @@ private:
     void on_matrix_multiply(wxCommandEvent& event);
     void on_matrix_scalar(wxCommandEvent& event);
     void on_matrix_inverse(wxCommandEvent& event);
+    void on_scalar_changed(wxCommandEvent& event);
+
+    MyComplex parse_complex(const wxString& str);
+    wxString complex_to_wx_string(const MyComplex& complex);
 
     void on_first_grid_changed(wxGridEvent& event);
     void on_second_grid_changed(wxGridEvent& event);
-    void save_first_frid();
+    void save_first_grid();
     void save_second_grid();
 
-    size_t current_first_id = 0;
-    size_t current_second_id = 0;
+    void init_matrix_grid(wxGrid* grid, size_t size);
+    void update_matrix_comboboxes();
+
+    Matrix get_matrix_from_grid(wxGrid* grid);
+    void set_matrix_to_grid(wxGrid* grid, const Matrix& matrix);
+
+    void add_result_to_list(const Matrix& result);
+
+    size_t current_first_id;
+    size_t current_second_id;
 
     MutableArraySequence<Matrix> matrices;
 
@@ -135,7 +147,6 @@ private:
     wxButton* button_multiply;
     wxButton* button_scalar;
     wxButton* button_inverse;
-
 };
 
 int run_gui();
