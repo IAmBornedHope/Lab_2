@@ -19,9 +19,7 @@ Stack<T, Container>::Stack(const std::initializer_list<T>& init_stack) : Stack()
 
 template<typename T, template<typename> class Container>
 requires Stackable<Container<T>, T>
-Stack<T, Container>::Stack(const Stack<T, Container>& stack) {
-    items_ = new Container<T>(*stack.items_);
-}
+Stack<T, Container>::Stack(const Stack<T, Container>& stack) : items_{new Container<T>(*stack.items_)} {}
 
 template<typename T, template<typename> class Container>
 requires Stackable<Container<T>, T>

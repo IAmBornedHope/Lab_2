@@ -17,8 +17,8 @@ SquareMatrix<T, Container>::SquareMatrix(size_t size) : items_{new Container<T>(
 
 template<typename T, template<typename> class Container>
 requires Matrixable<Container<T>, T>
-SquareMatrix<T, Container>::SquareMatrix(const SquareMatrix<T, Container>& matrix) :
-    items_{new Container<T>(*matrix.items_)}, size_{matrix.size_} {}
+SquareMatrix<T, Container>::SquareMatrix(const SquareMatrix<T, Container>& matrix) 
+    : items_{new Container<T>(*matrix.items_)}, size_{matrix.size_} {}
 
 template<typename T, template<typename> class Container>
 requires Matrixable<Container<T>, T>
