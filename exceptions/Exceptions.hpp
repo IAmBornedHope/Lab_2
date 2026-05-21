@@ -79,3 +79,9 @@ public:
     MatrixSizeMismatchException(const std::string& name = "function", size_t size_1 = 0, size_t size_2 = 0)
         : Exception(std::format("Матрицы разного размера в функции {}! Первая: {}х{}. Вторая: {}х{}", name, size_1, size_1, size_2, size_2)) {}
 };
+
+class EmptyOptionException: public Exception {
+public:
+    EmptyOptionException(const std::string& message = "Значение Option отсутствует")
+        : Exception(message) {}
+};
