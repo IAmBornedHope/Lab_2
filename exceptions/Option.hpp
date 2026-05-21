@@ -36,7 +36,7 @@ public:
     }
 
     const T& get_value() const {
-        if (!has_value()) {
+        if (!has_value_) {
             throw EmptyOptionException("Option пустое");
         }
         return storage_.value_;
