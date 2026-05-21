@@ -167,6 +167,10 @@ public:
  * @return Sequence<Bit<T>>* 
  */
     Sequence<Bit<T>>* insert_at(Bit<T> temp, size_t index) override;
+
+    Sequence<Bit<T>>* pop_at(size_t index) override;
+    Sequence<Bit<T>>* pop_front() override;
+    Sequence<Bit<T>>* pop_back() override;
 /**
  * @brief Конкатенация BitSequence
  * 

@@ -147,6 +147,21 @@ Sequence<Bit<T>>* BitSequence<T>::prepend(Bit<T> temp) {
 }
 
 template<integral T>
+Sequence<Bit<T>>* BitSequence<T>::pop_at(size_t index) {
+    return this;
+}
+
+template<integral T>
+Sequence<Bit<T>>* BitSequence<T>::pop_front() {
+    return this;
+}
+
+template<integral T>
+Sequence<Bit<T>>* BitSequence<T>::pop_back() {
+    return this;
+}
+
+template<integral T>
 Sequence<Bit<T>>* BitSequence<T>::get_subsequence(size_t start_index, size_t end_index) const {
     if (end_index >= get_length() || start_index > end_index) {
         throw IndexOutOfRangeException("BitSequence: get_subsequence. Некорректные индексы для подпоследовательности.");
@@ -175,7 +190,7 @@ Sequence<Bit<T>>* BitSequence<T>::concat(Sequence<Bit<T>>* sequence) const {
 template<integral T>
 BitSequence<T>* BitSequence<T>::And(const BitSequence<T>& sequence) const {
     if (size_ != sequence.size_) {
-        throw SequenceLengthMismatchException("BitSequence: And. Длины последовательностей не совпадают.");
+        throw SequenceLengthMismatchException("BitSequence: And.", size_, sequence.size_);
     }
 
     BitSequence<T>* operated = new BitSequence<T>(size_);
@@ -191,7 +206,7 @@ BitSequence<T>* BitSequence<T>::And(const BitSequence<T>& sequence) const {
 template<integral T>
 BitSequence<T>* BitSequence<T>::Or(const BitSequence<T>& sequence) const {
     if (size_ != sequence.size_) {
-        throw SequenceLengthMismatchException("BitSequence: Or. Длины последовательностей не совпадают.");
+        throw SequenceLengthMismatchException("BitSequence: Or.", size_, sequence.size_);
     }
 
     BitSequence<T>* operated = new BitSequence<T>(size_);
@@ -219,7 +234,7 @@ BitSequence<T>* BitSequence<T>::Not() const {
 template<integral T>
 BitSequence<T>* BitSequence<T>::Xor(const BitSequence<T>& sequence) const {
     if (size_ != sequence.size_) {
-        throw SequenceLengthMismatchException("BitSequence: Xor. Длины последовательностей не совпадают.");
+        throw SequenceLengthMismatchException("BitSequence: Xor.", size_, sequence.size_);
     }
 
     BitSequence<T>* operated = new BitSequence<T>(size_);

@@ -15,7 +15,9 @@ add_executable(lab_test
                test_SquareMatrix.cpp)
                
 target_link_libraries(lab_test 
-                      gtest_main 
+                      gtest_main
+                      exceptions
+                      sequence
                       dynamic_array 
                       linked_list 
                       bit_sequence 
