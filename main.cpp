@@ -15,13 +15,23 @@
 #include "my_types/Complex.hpp"
 #include "gui/app.hpp"
 #include "hanoi/HanoiTower.hpp"
+#include "exceptions/Option.hpp"
 
 int main() {
     setlocale(LC_ALL, "C.UTF8");
     SetConsoleOutputCP(CP_UTF8);
-    int result_q = run_gui();
+    int result = run_gui();
 
-    BitSequence<int> array();
+
+
+
+
+
+
+
+
+    
+    // BitSequence<int> array();
    //SquareMatrix<Complex<double>, MutableArraySequence> mx1{{Complex<double>{1.1, 2.2}, Complex<double>{6.0, 3.0}}, {Complex<double>{1.0, 2.0}, Complex<double>{-1.0, -1.0}}};
    
  //SquareMatrix<Complex<double>, MutableArraySequence> mx2{{Complex<double>{1.1, 2.2}, Complex<double>{1.1, 2.2}}, {Complex<double>{1.1, 2.2}, Complex<double>{1.1, 2.2}}};
